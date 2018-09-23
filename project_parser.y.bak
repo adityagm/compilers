@@ -1,0 +1,43 @@
+%{
+#include <stdio.h>
+#include <stdlib.h>
+void yyerror(char *);
+%}
+
+%union {int int_num; float float_num; char name;}
+
+%token ASN MINUS PLUS MUL DIV LT GT LTE GTE EQV NE
+%token IF THEN ELSE UNTIL ENDIF LOOP WHILE END PRINT
+%token <int_num> INUM
+%token <int_float> FNUM
+%token <name> VAR
+
+%start grammar
+
+%%
+
+grammar: | grammar input;
+
+input: assignment | operation | loops;
+
+assignment: VAR ASN number ';' ;
+
+loops: IF '('
+
+operation: operation PLUS value ';'
+	| operation MINUS value ';'
+	| operation MUL value ';'
+	| operation DIV value ';'
+	;
+	
+condition: condition LT value 
+	| condition GT value
+	| condition LTE value
+	| condition GTE value
+	| condition EQV value
+	| condition NE value
+	| value
+	;
+
+
+value: INUM | FNUM | VAR;
