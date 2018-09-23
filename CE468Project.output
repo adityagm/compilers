@@ -1,0 +1,831 @@
+Grammar
+
+    0 $accept: open $end
+
+    1 open: open begin
+    2     | begin
+
+    3 begin: BEG
+    4      | declaration
+    5      | init
+    6      | mark
+    7      | func
+    8      | end
+
+    9 declaration: DEFINE place name SEMI
+   10            | DEFINE transitions name SEMI
+
+   11 place: PLA
+   12      | PLA com place
+
+   13 com: COM
+   14    | /* empty */
+
+   15 transitions: TRS
+   16            | TRS COM transitions
+
+   17 name: AS PLACE
+   18     | AS TRANSITION
+
+   19 init: pla IS NET INP SEMI
+   20     | pla IS NET OUT SEMI
+   21     | pla IS INP TO trs SEMI
+   22     | trs IS CON TO trs VIA pla SEMI
+
+   23 pla: PLA
+   24    | PLA COM pla
+
+   25 trs: TRS
+   26    | TRS COM trs
+
+   27 mark: MARK pla WITH NUM TOKEN SEMI
+
+   28 func: loop
+   29     | ifstmt
+   30     | priority
+   31     | display
+
+   32 loop: LOOP
+   33     | UNTIL pla HAS NUM
+
+   34 ifstmt: IF trs IS EN THEN FIRE trs SEMI
+
+   35 priority: FAV trs OVER trs SEMI
+
+   36 display: DISP MARKING
+
+   37 end: END
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+PLA (258) 11 12 23 24
+TRS (259) 15 16 25 26
+BEG (260) 3
+DEFINE (261) 9 10
+AS (262) 17 18
+COM (263) 13 16 24 26
+PLACE (264) 17
+TRANSITION (265) 18
+NET (266) 19 20
+INP (267) 19 21
+OUT (268) 20
+CON (269) 22
+VIA (270) 22
+MARK (271) 27
+LOOP (272) 32
+IF (273) 34
+TOKEN (274) 27
+THEN (275) 34
+FIRE (276) 34
+EN (277) 34
+FAV (278) 35
+DISP (279) 36
+UNTIL (280) 33
+HAS (281) 33
+SEMI (282) 9 10 19 20 21 22 27 34 35
+IS (283) 19 20 21 22 34
+TO (284) 21 22
+NUM (285) 27 33
+OVER (286) 35
+WITH (287) 27
+END (288) 37
+MARKING (289) 36
+
+
+Nonterminals, with rules where they appear
+
+$accept (35)
+    on left: 0
+open (36)
+    on left: 1 2, on right: 0 1
+begin (37)
+    on left: 3 4 5 6 7 8, on right: 1 2
+declaration (38)
+    on left: 9 10, on right: 4
+place (39)
+    on left: 11 12, on right: 9 12
+com (40)
+    on left: 13 14, on right: 12
+transitions (41)
+    on left: 15 16, on right: 10 16
+name (42)
+    on left: 17 18, on right: 9 10
+init (43)
+    on left: 19 20 21 22, on right: 5
+pla (44)
+    on left: 23 24, on right: 19 20 21 22 24 27 33
+trs (45)
+    on left: 25 26, on right: 21 22 26 34 35
+mark (46)
+    on left: 27, on right: 6
+func (47)
+    on left: 28 29 30 31, on right: 7
+loop (48)
+    on left: 32 33, on right: 28
+ifstmt (49)
+    on left: 34, on right: 29
+priority (50)
+    on left: 35, on right: 30
+display (51)
+    on left: 36, on right: 31
+end (52)
+    on left: 37, on right: 8
+
+
+state 0
+
+    0 $accept: . open $end
+
+    PLA     shift, and go to state 1
+    TRS     shift, and go to state 2
+    BEG     shift, and go to state 3
+    DEFINE  shift, and go to state 4
+    MARK    shift, and go to state 5
+    LOOP    shift, and go to state 6
+    IF      shift, and go to state 7
+    FAV     shift, and go to state 8
+    DISP    shift, and go to state 9
+    UNTIL   shift, and go to state 10
+    END     shift, and go to state 11
+
+    open         go to state 12
+    begin        go to state 13
+    declaration  go to state 14
+    init         go to state 15
+    pla          go to state 16
+    trs          go to state 17
+    mark         go to state 18
+    func         go to state 19
+    loop         go to state 20
+    ifstmt       go to state 21
+    priority     go to state 22
+    display      go to state 23
+    end          go to state 24
+
+
+state 1
+
+   23 pla: PLA .
+   24    | PLA . COM pla
+
+    COM  shift, and go to state 25
+
+    $default  reduce using rule 23 (pla)
+
+
+state 2
+
+   25 trs: TRS .
+   26    | TRS . COM trs
+
+    COM  shift, and go to state 26
+
+    $default  reduce using rule 25 (trs)
+
+
+state 3
+
+    3 begin: BEG .
+
+    $default  reduce using rule 3 (begin)
+
+
+state 4
+
+    9 declaration: DEFINE . place name SEMI
+   10            | DEFINE . transitions name SEMI
+
+    PLA  shift, and go to state 27
+    TRS  shift, and go to state 28
+
+    place        go to state 29
+    transitions  go to state 30
+
+
+state 5
+
+   27 mark: MARK . pla WITH NUM TOKEN SEMI
+
+    PLA  shift, and go to state 1
+
+    pla  go to state 31
+
+
+state 6
+
+   32 loop: LOOP .
+
+    $default  reduce using rule 32 (loop)
+
+
+state 7
+
+   34 ifstmt: IF . trs IS EN THEN FIRE trs SEMI
+
+    TRS  shift, and go to state 2
+
+    trs  go to state 32
+
+
+state 8
+
+   35 priority: FAV . trs OVER trs SEMI
+
+    TRS  shift, and go to state 2
+
+    trs  go to state 33
+
+
+state 9
+
+   36 display: DISP . MARKING
+
+    MARKING  shift, and go to state 34
+
+
+state 10
+
+   33 loop: UNTIL . pla HAS NUM
+
+    PLA  shift, and go to state 1
+
+    pla  go to state 35
+
+
+state 11
+
+   37 end: END .
+
+    $default  reduce using rule 37 (end)
+
+
+state 12
+
+    0 $accept: open . $end
+    1 open: open . begin
+
+    $end    shift, and go to state 36
+    PLA     shift, and go to state 1
+    TRS     shift, and go to state 2
+    BEG     shift, and go to state 3
+    DEFINE  shift, and go to state 4
+    MARK    shift, and go to state 5
+    LOOP    shift, and go to state 6
+    IF      shift, and go to state 7
+    FAV     shift, and go to state 8
+    DISP    shift, and go to state 9
+    UNTIL   shift, and go to state 10
+    END     shift, and go to state 11
+
+    begin        go to state 37
+    declaration  go to state 14
+    init         go to state 15
+    pla          go to state 16
+    trs          go to state 17
+    mark         go to state 18
+    func         go to state 19
+    loop         go to state 20
+    ifstmt       go to state 21
+    priority     go to state 22
+    display      go to state 23
+    end          go to state 24
+
+
+state 13
+
+    2 open: begin .
+
+    $default  reduce using rule 2 (open)
+
+
+state 14
+
+    4 begin: declaration .
+
+    $default  reduce using rule 4 (begin)
+
+
+state 15
+
+    5 begin: init .
+
+    $default  reduce using rule 5 (begin)
+
+
+state 16
+
+   19 init: pla . IS NET INP SEMI
+   20     | pla . IS NET OUT SEMI
+   21     | pla . IS INP TO trs SEMI
+
+    IS  shift, and go to state 38
+
+
+state 17
+
+   22 init: trs . IS CON TO trs VIA pla SEMI
+
+    IS  shift, and go to state 39
+
+
+state 18
+
+    6 begin: mark .
+
+    $default  reduce using rule 6 (begin)
+
+
+state 19
+
+    7 begin: func .
+
+    $default  reduce using rule 7 (begin)
+
+
+state 20
+
+   28 func: loop .
+
+    $default  reduce using rule 28 (func)
+
+
+state 21
+
+   29 func: ifstmt .
+
+    $default  reduce using rule 29 (func)
+
+
+state 22
+
+   30 func: priority .
+
+    $default  reduce using rule 30 (func)
+
+
+state 23
+
+   31 func: display .
+
+    $default  reduce using rule 31 (func)
+
+
+state 24
+
+    8 begin: end .
+
+    $default  reduce using rule 8 (begin)
+
+
+state 25
+
+   24 pla: PLA COM . pla
+
+    PLA  shift, and go to state 1
+
+    pla  go to state 40
+
+
+state 26
+
+   26 trs: TRS COM . trs
+
+    TRS  shift, and go to state 2
+
+    trs  go to state 41
+
+
+state 27
+
+   11 place: PLA .
+   12      | PLA . com place
+
+    COM  shift, and go to state 42
+
+    PLA       reduce using rule 14 (com)
+    $default  reduce using rule 11 (place)
+
+    com  go to state 43
+
+
+state 28
+
+   15 transitions: TRS .
+   16            | TRS . COM transitions
+
+    COM  shift, and go to state 44
+
+    $default  reduce using rule 15 (transitions)
+
+
+state 29
+
+    9 declaration: DEFINE place . name SEMI
+
+    AS  shift, and go to state 45
+
+    name  go to state 46
+
+
+state 30
+
+   10 declaration: DEFINE transitions . name SEMI
+
+    AS  shift, and go to state 45
+
+    name  go to state 47
+
+
+state 31
+
+   27 mark: MARK pla . WITH NUM TOKEN SEMI
+
+    WITH  shift, and go to state 48
+
+
+state 32
+
+   34 ifstmt: IF trs . IS EN THEN FIRE trs SEMI
+
+    IS  shift, and go to state 49
+
+
+state 33
+
+   35 priority: FAV trs . OVER trs SEMI
+
+    OVER  shift, and go to state 50
+
+
+state 34
+
+   36 display: DISP MARKING .
+
+    $default  reduce using rule 36 (display)
+
+
+state 35
+
+   33 loop: UNTIL pla . HAS NUM
+
+    HAS  shift, and go to state 51
+
+
+state 36
+
+    0 $accept: open $end .
+
+    $default  accept
+
+
+state 37
+
+    1 open: open begin .
+
+    $default  reduce using rule 1 (open)
+
+
+state 38
+
+   19 init: pla IS . NET INP SEMI
+   20     | pla IS . NET OUT SEMI
+   21     | pla IS . INP TO trs SEMI
+
+    NET  shift, and go to state 52
+    INP  shift, and go to state 53
+
+
+state 39
+
+   22 init: trs IS . CON TO trs VIA pla SEMI
+
+    CON  shift, and go to state 54
+
+
+state 40
+
+   24 pla: PLA COM pla .
+
+    $default  reduce using rule 24 (pla)
+
+
+state 41
+
+   26 trs: TRS COM trs .
+
+    $default  reduce using rule 26 (trs)
+
+
+state 42
+
+   13 com: COM .
+
+    $default  reduce using rule 13 (com)
+
+
+state 43
+
+   12 place: PLA com . place
+
+    PLA  shift, and go to state 27
+
+    place  go to state 55
+
+
+state 44
+
+   16 transitions: TRS COM . transitions
+
+    TRS  shift, and go to state 28
+
+    transitions  go to state 56
+
+
+state 45
+
+   17 name: AS . PLACE
+   18     | AS . TRANSITION
+
+    PLACE       shift, and go to state 57
+    TRANSITION  shift, and go to state 58
+
+
+state 46
+
+    9 declaration: DEFINE place name . SEMI
+
+    SEMI  shift, and go to state 59
+
+
+state 47
+
+   10 declaration: DEFINE transitions name . SEMI
+
+    SEMI  shift, and go to state 60
+
+
+state 48
+
+   27 mark: MARK pla WITH . NUM TOKEN SEMI
+
+    NUM  shift, and go to state 61
+
+
+state 49
+
+   34 ifstmt: IF trs IS . EN THEN FIRE trs SEMI
+
+    EN  shift, and go to state 62
+
+
+state 50
+
+   35 priority: FAV trs OVER . trs SEMI
+
+    TRS  shift, and go to state 2
+
+    trs  go to state 63
+
+
+state 51
+
+   33 loop: UNTIL pla HAS . NUM
+
+    NUM  shift, and go to state 64
+
+
+state 52
+
+   19 init: pla IS NET . INP SEMI
+   20     | pla IS NET . OUT SEMI
+
+    INP  shift, and go to state 65
+    OUT  shift, and go to state 66
+
+
+state 53
+
+   21 init: pla IS INP . TO trs SEMI
+
+    TO  shift, and go to state 67
+
+
+state 54
+
+   22 init: trs IS CON . TO trs VIA pla SEMI
+
+    TO  shift, and go to state 68
+
+
+state 55
+
+   12 place: PLA com place .
+
+    $default  reduce using rule 12 (place)
+
+
+state 56
+
+   16 transitions: TRS COM transitions .
+
+    $default  reduce using rule 16 (transitions)
+
+
+state 57
+
+   17 name: AS PLACE .
+
+    $default  reduce using rule 17 (name)
+
+
+state 58
+
+   18 name: AS TRANSITION .
+
+    $default  reduce using rule 18 (name)
+
+
+state 59
+
+    9 declaration: DEFINE place name SEMI .
+
+    $default  reduce using rule 9 (declaration)
+
+
+state 60
+
+   10 declaration: DEFINE transitions name SEMI .
+
+    $default  reduce using rule 10 (declaration)
+
+
+state 61
+
+   27 mark: MARK pla WITH NUM . TOKEN SEMI
+
+    TOKEN  shift, and go to state 69
+
+
+state 62
+
+   34 ifstmt: IF trs IS EN . THEN FIRE trs SEMI
+
+    THEN  shift, and go to state 70
+
+
+state 63
+
+   35 priority: FAV trs OVER trs . SEMI
+
+    SEMI  shift, and go to state 71
+
+
+state 64
+
+   33 loop: UNTIL pla HAS NUM .
+
+    $default  reduce using rule 33 (loop)
+
+
+state 65
+
+   19 init: pla IS NET INP . SEMI
+
+    SEMI  shift, and go to state 72
+
+
+state 66
+
+   20 init: pla IS NET OUT . SEMI
+
+    SEMI  shift, and go to state 73
+
+
+state 67
+
+   21 init: pla IS INP TO . trs SEMI
+
+    TRS  shift, and go to state 2
+
+    trs  go to state 74
+
+
+state 68
+
+   22 init: trs IS CON TO . trs VIA pla SEMI
+
+    TRS  shift, and go to state 2
+
+    trs  go to state 75
+
+
+state 69
+
+   27 mark: MARK pla WITH NUM TOKEN . SEMI
+
+    SEMI  shift, and go to state 76
+
+
+state 70
+
+   34 ifstmt: IF trs IS EN THEN . FIRE trs SEMI
+
+    FIRE  shift, and go to state 77
+
+
+state 71
+
+   35 priority: FAV trs OVER trs SEMI .
+
+    $default  reduce using rule 35 (priority)
+
+
+state 72
+
+   19 init: pla IS NET INP SEMI .
+
+    $default  reduce using rule 19 (init)
+
+
+state 73
+
+   20 init: pla IS NET OUT SEMI .
+
+    $default  reduce using rule 20 (init)
+
+
+state 74
+
+   21 init: pla IS INP TO trs . SEMI
+
+    SEMI  shift, and go to state 78
+
+
+state 75
+
+   22 init: trs IS CON TO trs . VIA pla SEMI
+
+    VIA  shift, and go to state 79
+
+
+state 76
+
+   27 mark: MARK pla WITH NUM TOKEN SEMI .
+
+    $default  reduce using rule 27 (mark)
+
+
+state 77
+
+   34 ifstmt: IF trs IS EN THEN FIRE . trs SEMI
+
+    TRS  shift, and go to state 2
+
+    trs  go to state 80
+
+
+state 78
+
+   21 init: pla IS INP TO trs SEMI .
+
+    $default  reduce using rule 21 (init)
+
+
+state 79
+
+   22 init: trs IS CON TO trs VIA . pla SEMI
+
+    PLA  shift, and go to state 1
+
+    pla  go to state 81
+
+
+state 80
+
+   34 ifstmt: IF trs IS EN THEN FIRE trs . SEMI
+
+    SEMI  shift, and go to state 82
+
+
+state 81
+
+   22 init: trs IS CON TO trs VIA pla . SEMI
+
+    SEMI  shift, and go to state 83
+
+
+state 82
+
+   34 ifstmt: IF trs IS EN THEN FIRE trs SEMI .
+
+    $default  reduce using rule 34 (ifstmt)
+
+
+state 83
+
+   22 init: trs IS CON TO trs VIA pla SEMI .
+
+    $default  reduce using rule 22 (init)

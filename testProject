@@ -1,0 +1,16 @@
+begin
+define P1,P2,P3,P4 as place;
+define T1,T2,T3 as transition;
+P1 is net input;
+P4 is net output;
+P1 is input to T1,T2;
+T3 is connectedd to T2 via P3; 
+T3 is connected to T1 via P2; 
+mark P1 with 6 tokens;
+loop
+   if T1 is enabled then fire T1;
+   if T2 is enabled then fire T2; 
+   favour T1 over T2;
+   display marking
+until P4 has 6
+end
